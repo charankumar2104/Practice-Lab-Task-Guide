@@ -3,7 +3,7 @@
 **Lab Title:** Azure DevOps with Azure Infrastructure - End-to-End Hands-On Lab  
 **Client:** Contoso Innovations Inc.  
 **Difficulty:** Beginner to Intermediate  
-**Total Tasks:** 7  
+**Total Tasks:** 8  
 **Total Estimated Duration:** 8 to 10 Hours  
 **Lab Type:** Guided Hands-On
 

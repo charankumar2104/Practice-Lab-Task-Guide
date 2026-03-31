@@ -60,20 +60,16 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Azure Portal login page]**
-
----
-
 ### Step 2: Navigate to Your Resource Group
 
 1. Click the **Search Bar** at the top of the Azure Portal home page
 2. Type: `Resource Groups`
 3. Click **Resource Groups** from the dropdown
-4. Find and click on your Resource Group (e.g., `rg-participant-john`)
+4. Find and click on your Resource Group (e.g., `ODL-azure-Contoso-2157974`)
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot showing the search for Resource Groups and the list with the participant's RG highlighted]**
+<img src="./images/Screenshot 2026-03-30 220507.png">
 
 ---
 
@@ -82,10 +78,9 @@ https://portal.azure.com
 1. Inside your Resource Group, look at the **left-hand menu**
 2. Scroll down and click on **Access Control (IAM)**
 3. The IAM page will open
-
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the left menu inside the Resource Group with "Access Control (IAM)" highlighted]**
+<img src="./images/Screenshot 2026-03-30 215048.png">
 
 ---
 
@@ -99,7 +94,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Role Assignments tab showing the current list before any changes, with the participant's current role visible]**
+<img src="./images/Screenshot 2026-03-30 215620.png">
 
 ---
 
@@ -113,7 +108,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the IAM page with the "+ Add" button clicked and the dropdown showing "Add role assignment" highlighted]**
+<img src="./images/Screenshot 2026-03-30 220902.png">
 
 ---
 
@@ -129,7 +124,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the "Add role assignment" page with "Reader" searched, selected in the list, and the Next button highlighted]**
+<img src="./images/Screenshot 2026-03-30 221109.png">
 
 ---
 
@@ -140,14 +135,14 @@ https://portal.azure.com
 3. Click the **+ Select members** link/button
 4. A panel will open on the right side — a search box will appear
 5. Type your **username** or part of your name in the search box
-   - Example: type `john` to find `john@contosolab.onmicrosoft.com`
+   - Example: type `odl_user` to find `odl_user_2157974@contosolab.onmicrosoft.com`
 6. Your user account will appear in the results below the search box
 7. Click on your **username** to select it — a checkmark will appear next to it
 8. Click the **Select** button at the bottom of the panel
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Members step with the Select members panel open, the participant's username searched, selected (checkmark visible), and the Select button highlighted]**
+<img src="./images/Screenshot 2026-03-30 221345.png">
 
 ---
 
@@ -162,7 +157,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Members step showing the participant's username successfully added to the Members list before clicking Next]**
+<img src="./images/Screenshot 2026-03-30 221544.png">
 
 ---
 
@@ -178,7 +173,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the "Review + assign" tab showing Role = Reader, Scope = the RG name, and Member = participant username, with the button highlighted]**
+<img src="./images/Screenshot 2026-03-30 221650.png">
 
 ---
 
@@ -194,7 +189,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Role Assignments tab showing the participant's username listed twice — once with original role and once with Reader, with the green success notification visible]**
+<img src="./images/Screenshot 2026-03-30 222412.png">
 
 ---
 
@@ -211,7 +206,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Role Assignments list with both entries for the participant username visible, and the Reader entry highlighted/circled for clarity]**
+<img src="./images/Screenshot 2026-03-30 222412.png">
 
 ---
 
@@ -225,19 +220,19 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot showing the Reader role row selected with the checkbox checked (other rows unchecked), highlighting only the Reader row is selected]**
+<img src="./images/Screenshot 2026-03-30 222513.png">
 
 ---
 
 ### Step 13: Click Remove
 
 1. With the Reader row selected, look at the top of the Role assignments list
-2. You will see a **Remove** button appear (it may have been greyed out before you selected a row)
-3. Click the **Remove** button
+2. You will see a **Delete** button appear (it may have been greyed out before you selected a row)
+3. Click the **Delete** button
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot showing the Remove button at the top of the Role Assignments list now active/clickable, with an arrow pointing to it]**
+<img src="./images/Screenshot 2026-03-30 222554.png">
 
 ---
 
@@ -246,10 +241,6 @@ https://portal.azure.com
 1. A confirmation dialog box will appear asking: **"Do you want to remove the following role assignment(s)?"**
 2. Read the confirmation — it should show the **Reader** role for your username
 3. Click **Yes** to confirm the removal
-
----
-
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the confirmation dialog showing the Reader role assignment details and the Yes button highlighted]**
 
 ---
 
@@ -265,7 +256,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Role Assignments tab after removal, showing the participant's username only once with their original role, and the green success notification visible]**
+<img src="./images/Screenshot 2026-03-30 222716.png">
 
 ---
 
@@ -279,7 +270,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the final Role Assignments list confirming the count matches the original and the participant username appears only once]**
+<img src="./images/Screenshot 2026-03-30 222716.png">
 
 ---
 

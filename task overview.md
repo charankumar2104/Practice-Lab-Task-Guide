@@ -17,25 +17,18 @@ Do not skip tasks or change the order. Each task builds on the knowledge and set
 
 ---
 
-> [IMAGE PLACEHOLDER - A visual progress bar or numbered step diagram showing all 11 tasks in order from Task 1 to Task 11, with task names labeled under each number]
-
----
-
 ## Task List at a Glance
 
 | Task Number | Task Name | Type | Estimated Time |
 |---|---|---|---|
 | Task 1 | Explore Your Pre-Provisioned Resource Group | Read Only | 15-20 mins |
-| Task 2 | View the Linux VM Details | Read Only | 15-20 mins |
-| Task 3 | Check IAM and RBAC on Your Resource Group | Read Only | 15-20 mins |
-| Task 4 | Assign a Reader Role and Remove It | Hands-On with Revert | 20-25 mins |
-| Task 5 | Export the ARM Template of the Linux VM | Read Only | 15-20 mins |
-| Task 6 | Create a New Resource Group and Delete It | Hands-On with Revert | 20-25 mins |
-| Task 7 | Locate Your Service Principal Details | Read Only | 15-20 mins |
-| Task 8 | Assign RBAC to the Service Principal at Subscription Level and Revert | Hands-On with Revert | 25-30 mins |
-| Task 9 | Create a Service Connection in Azure DevOps | Configuration | 20-25 mins |
-| Task 10 | Run a Pipeline Using the Service Connection | Hands-On Pipeline | 25-30 mins |
-| Task 11 | Start and Stop the VM via Pipeline | Hands-On with Revert | 30-35 mins |
+| Task 2 | Check IAM and RBAC on Your Resource Group | Read Only | 15-20 mins |
+| Task 3 | Assign a Reader Role and Remove It | Hands-On with Revert | 20-25 mins |
+| Task 4 | Locate Your Service Principal Details | Read Only | 15-20 mins |
+| Task 5 | Assign RBAC to the Service Principal at Subscription Level  | Hands-On with Revert | 25-30 mins |
+| Task 6 | Create a Service Connection in Azure DevOps | Configuration | 20-25 mins |
+| Task 7 | Run a Pipeline Using the Service Connection | Hands-On Pipeline | 25-30 mins |
+| Task 8 | Deploy Azure Resources from ARM Template via Pipeline and Clean Up | Hands-On with Revert | 45-50 mins |
 
 ---
 
@@ -67,43 +60,7 @@ None. This task is entirely read-only.
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of a Resource Group overview page showing the list of resources inside it and the tags section]
-
----
-
-## Task 2: View the Linux VM Details
-
-**Type:** Read Only  
-**Estimated Time:** 15-20 Minutes  
-**Detailed Guide:** Task-2_View_VM_Details.md
-
-### What You Will Do
-
-In this task, you will click on your pre-deployed Linux Virtual Machine inside the Resource Group and explore its properties in detail. You will note down the VM size, operating system, IP addresses, region, and current status. You will then open the JSON View of the VM — which shows the raw ARM representation of the resource — and identify the key sections of an ARM template.
-
-### What You Will See
-
-You will see the full properties of the Virtual Machine including the hardware profile (size), the OS disk details, the network interface it is attached to, and its current power state (Running). The JSON View will show you the exact ARM template structure that was used to deploy this VM, including the resource type, API version, and configuration properties.
-
-### What You Will Learn
-
-- How to read and interpret the overview properties of a Virtual Machine
-- What VM size means and how it relates to cost and performance
-- What supporting resources a Virtual Machine depends on
-- What ARM JSON looks like and what its key sections mean
-- The resource provider naming convention used in Azure (e.g., Microsoft.Compute/virtualMachines)
-
-### Changes Made
-
-None. This task is entirely read-only.
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Virtual Machine overview page showing the key fields: Status, Size, Operating system, and IP addresses all labeled]
-
----
-
-## Task 3: Check IAM and RBAC on Your Resource Group
+## Task 2: Check IAM and RBAC on Your Resource Group
 
 **Type:** Read Only  
 **Estimated Time:** 15-20 Minutes  
@@ -132,11 +89,7 @@ None. This task is entirely read-only.
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of the Access Control (IAM) Role Assignments tab showing entries for both a user account and a service principal with their roles and scope columns visible]
-
----
-
-## Task 4: Assign a Reader Role and Remove It
+## Task 3: Assign a Reader Role and Remove It
 
 **Type:** Hands-On with Full Revert  
 **Estimated Time:** 20-25 Minutes  
@@ -169,81 +122,9 @@ A Reader role assignment is added and then fully removed. The final state of the
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot showing the Role Assignments list with the participant's username appearing twice - once with the original role and once with Reader - to illustrate the additive nature of RBAC]
 
----
 
-## Task 5: Export the ARM Template of the Linux VM
-
-**Type:** Read Only  
-**Estimated Time:** 15-20 Minutes  
-**Detailed Guide:** Task-5_Export_ARM_Template.md
-
-### What You Will Do
-
-In this task, you will use the Export Template feature in the Azure Portal to generate and download the ARM template that represents your pre-deployed Linux Virtual Machine. You will open the downloaded template files and read through the JSON structure, identifying the key sections: parameters, variables, and resources. You will also read the parameters.json file and understand how it works together with the main template file.
-
-### What You Will See
-
-The Export Template page will generate two files: template.json and parameters.json. The template.json file will contain the full ARM definition of all resources in your Resource Group — the Virtual Machine, Network Interface, Virtual Network, Public IP, OS Disk, and Network Security Group. You will be able to see how each resource references other resources through their IDs.
-
-### What You Will Learn
-
-- What an ARM template is and why it is used
-- The structure of an ARM template: parameters, variables, resources, and outputs
-- How to export an ARM template from an existing resource in the Azure Portal
-- How template.json and parameters.json work together
-- How Infrastructure as Code (IaC) eliminates the need for manual resource creation
-- Why ARM templates enable repeatable, consistent deployments
-
-### Changes Made
-
-None. This task is entirely read-only. Downloading the template does not modify any Azure resource.
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Export Template page showing the generated template.json content in the editor with the parameters and resources sections visible]
-
----
-
-## Task 6: Create a New Resource Group and Delete It
-
-**Type:** Hands-On with Full Revert  
-**Estimated Time:** 20-25 Minutes  
-**Detailed Guide:** Task-6_Create_Delete_Resource_Group.md
-
-### What You Will Do
-
-In this task, you will create a brand new, empty Resource Group inside the Azure Subscription. You will give it a name, assign it to a region, and add tags to it. After confirming it was created successfully and exploring its properties, you will delete the Resource Group to restore the environment to its original state.
-
-This task is split into two parts:
-- Part A: Create the new Resource Group
-- Part B: Delete the Resource Group (revert)
-
-### What You Will See
-
-After creation, the new Resource Group will appear in the Resource Groups list alongside your original lab Resource Group. It will be completely empty — no resources inside it. The tags you added will be visible on the Tags page. After deletion, the Resource Group will disappear from the list entirely and the environment will look exactly as it did before this task.
-
-### What You Will Learn
-
-- How to create a Resource Group through the Azure Portal
-- How to assign a region and add tags during Resource Group creation
-- That Resource Groups can be empty and that is a valid state
-- What happens when you delete a Resource Group — all contents are deleted with it
-- Why verifying an RG is empty before deleting is important in real projects
-- How to use the portal's deletion confirmation mechanism
-
-### Changes Made
-
-A new empty Resource Group is created and then fully deleted. The original lab Resource Group is untouched throughout this task.
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the new Resource Group creation form showing the name, region, and tags fields filled in before clicking Create]
-
----
-
-## Task 7: Locate Your Service Principal Details
+## Task 4: Locate Your Service Principal Details
 
 **Type:** Read Only  
 **Estimated Time:** 15-20 Minutes  
@@ -272,11 +153,7 @@ None. This task is entirely read-only.
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of a Service Principal App Registration overview page in Microsoft Entra ID with Application (client) ID and Directory (tenant) ID fields highlighted]
-
----
-
-## Task 8: Assign RBAC to the Service Principal at Subscription Level and Revert
+## Task 5: Assign RBAC to the Service Principal at Subscription Level 
 
 **Type:** Hands-On with Full Revert  
 **Estimated Time:** 25-30 Minutes  
@@ -284,16 +161,15 @@ None. This task is entirely read-only.
 
 ### What You Will Do
 
-In this task, you will navigate to the Subscriptions page in the Azure Portal and open the Access Control (IAM) section at the Subscription level. You will assign the Reader role to your pre-provisioned Service Principal at the Subscription scope — a broader level than the Resource Group scope it already has. You will verify the assignment was successful, then navigate to another Resource Group to observe how the Subscription-level role grants inherited access there. Finally, you will remove the Subscription-level Reader role to restore the SP back to only its original Resource Group-level Contributor role.
+In this task, you will navigate to the Subscriptions page in the Azure Portal and open the Access Control (IAM) section at the Subscription level. You will assign the Contributor role to your pre-provisioned Service Principal at the Subscription scope — a broader level than the Resource Group scope it already has. You will verify the assignment was successful, then navigate to another Resource Group to observe how the Subscription-level role grants inherited access there. 
 
 This task is split into three parts:
 - Part A: Note the current Subscription-level role assignments before making changes
-- Part B: Assign the Reader role to the Service Principal at Subscription scope
-- Part C: Remove the Subscription-level Reader role (revert to original state)
+- Part B: Assign the Contributor role to the Service Principal at Subscription scope
 
 ### What You Will See
 
-Before the task, the Service Principal will not appear in the Subscription-level Role Assignments list — it only has access at the Resource Group level. After assigning the Reader role, the SP will appear in the Subscription-level list and will also be visible in the Role Assignments of other Resource Groups — showing that Subscription-level roles are inherited by all Resource Groups underneath. After removal, the SP will disappear from the Subscription-level list and from other Resource Groups, while its original Contributor role on your own Resource Group remains completely unchanged.
+Before the task, the Service Principal will not appear in the Subscription-level Role Assignments list — it only has access at the Resource Group level. After assigning the Contributor role, the SP will appear in the Subscription-level list and will also be visible in the Role Assignments of other Resource Groups — showing that Subscription-level roles are inherited by all Resource Groups underneath.
 
 ### What You Will Learn
 
@@ -307,15 +183,11 @@ Before the task, the Service Principal will not appear in the Subscription-level
 
 ### Changes Made
 
-The Reader role is assigned to the Service Principal at the Subscription level and then fully removed. The SP's original Contributor role at the Resource Group level is never touched. After the revert, the SP's permissions are exactly the same as before the task began.
+The Contributor role is assigned to the Service Principal at the Subscription level and then fully removed. The SP's original Contributor role at the Resource Group level is never touched. After the revert, the SP's permissions are exactly the same as before the task began.
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of the Subscription-level Access Control (IAM) Role Assignments tab showing the Service Principal listed with Reader role and Scope = This resource (Subscription), then a second screenshot showing the SP removed from the list after the revert]
-
----
-
-## Task 9: Create a Service Connection in Azure DevOps
+## Task 6: Create a Service Connection in Azure DevOps
 
 **Type:** Configuration  
 **Estimated Time:** 20-25 Minutes  
@@ -345,11 +217,7 @@ A Service Connection named azure-sp-connection is created inside your Azure DevO
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of the Service Connection form filled in with the four credential fields (Subscription ID, Client ID, Tenant ID visible - Client Secret field blurred) and the Verify button highlighted]
-
----
-
-## Task 10: Run a Pipeline Using the Service Connection
+## Task 7: Run a Pipeline Using the Service Connection
 
 **Type:** Hands-On Pipeline  
 **Estimated Time:** 25-30 Minutes  
@@ -379,45 +247,39 @@ A YAML file is created in your repository and a pipeline is configured and run. 
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of the pipeline run logs showing the successful output of az account show and az resource list with the VM visible in the resource list output]
+## Task 8: Deploy Azure Resources from ARM Template via Pipeline and Clean Up
 
----
-
-## Task 11: Start and Stop the VM via Pipeline
-
-**Type:** Hands-On with Full Revert  
-**Estimated Time:** 30-35 Minutes  
-**Detailed Guide:** Task-11_Start_Stop_VM_Pipeline.md
+**Type:** Hands-On — Full Lifecycle (Create → List → Delete)
+**Estimated Time:** 45–55 Minutes
+**Detailed Guide:** Task-8_ARM_Template_Pipeline.md
 
 ### What You Will Do
 
-In this task, you will modify your existing pipeline twice. First, you will replace the pipeline content with a script that stops your Linux Virtual Machine using the az vm stop command. You will run this pipeline, watch the logs, and verify in the Azure Portal that the VM changes to a Stopped (deallocated) state. You will then update the pipeline again with a script that starts the VM using the az vm start command, run it, and confirm in the Azure Portal that the VM returns to Running state.
+In this task, you will build three separate pipelines in Azure DevOps that manage the complete lifecycle of Azure resources using an ARM template stored in a GitHub repository. First, you will write and run a Deploy pipeline that creates a Resource Group, then fetches the ARM template directly from GitHub using its raw URL and deploys a Linux Virtual Machine and a Storage Account. You will then write and run a List pipeline that queries the Resource Group and prints all deployed resources in a table along with a total resource count. Finally, you will write and run a Delete pipeline that records the resources before removal, deletes the entire Resource Group and everything inside it, and confirms the cleanup.
 
-This task is split into three parts:
-- Part A: Verify the VM is in Running state before you begin
-- Part B: Modify and run the pipeline to stop the VM
-- Part C: Modify and run the pipeline to start the VM and restore it to Running state
+This task is split into five parts:
+- Part A: Prepare the ARM template in GitHub and get its raw URL
+- Part B: Build and run the Deploy pipeline to create the Resource Group, VM, and Storage Account
+- Part C: Build and run the List pipeline to verify all deployed resources
+- Part D: Build and run the Delete pipeline to remove all resources
+- Part E: Review the complete pipeline run history and confirm all three runs succeeded
 
 ### What You Will See
 
-After running the Stop pipeline, the Azure Portal will show the VM status as Stopped (deallocated). The pipeline logs will show the output VM deallocated confirming the operation completed. After running the Start pipeline, the Azure Portal will show the VM status return to Running. The pipeline logs will show VM running confirming the restore is complete. Your pipeline Run History in Azure DevOps will show two successful runs — one for Stop and one for Start.
+After running the Deploy pipeline, the Azure Portal will show the Resource Group containing a Linux VM and a Storage Account. The pipeline logs will display a resource table with names and types, and confirm the VM is in VM running state and the Storage Account status is available. After running the List pipeline, the logs will display a full breakdown of every resource in the group including networking components, with a total resource count at the bottom. After running the Delete pipeline, the logs will show the pre-deletion resource list, confirm the delete command was sent, and verify the Resource Group no longer exists. Your pipeline Run History in Azure DevOps will show three successful runs — Deploy, List, and Delete.
 
 ### What You Will Learn
 
-- The difference between VM power states: Running, Stopped, and Deallocated
-- Why Deallocated stops compute billing while Stopped (OS level) does not
-- How to use az vm stop and az vm start commands inside a pipeline
-- How real teams use scheduled pipelines to shut down non-production VMs to save costs
-- How to read pipeline run history and compare multiple runs
-- How to verify infrastructure state changes in the Azure Portal after a pipeline run
+- How to deploy Azure resources from an ARM template hosted on GitHub using a pipeline
+- How to use az deployment group create with --template-uri to reference a remote template without downloading it
+- How to pass parameters like VM name and Storage Account name into an ARM deployment from a pipeline script
+- How to list and verify Azure resources programmatically using az resource list, az vm list, and az storage account list
+- How to safely delete an entire Resource Group and all its resources using az group delete inside a pipeline
+- How to use --yes and --no-wait flags in automated delete commands where no human is present to confirm
 
 ### Changes Made
 
-The VM is stopped via pipeline and then started via pipeline. At the end of this task, the VM is fully restored to Running state — identical to its state before the task began. The pipeline YAML file in Repos will reflect the Start script as its final committed version.
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot split or side by side showing: left side - Azure Portal VM status showing "Stopped (deallocated)" after the Stop pipeline, and right side - Azure Portal VM status showing "Running" after the Start pipeline]
+A Resource Group, Linux Virtual Machine, Storage Account, and all associated networking resources are created via the Deploy pipeline. The List pipeline makes no changes — it only reads and reports. The Delete pipeline removes the Resource Group and all resources inside it entirely. At the end of this task, the subscription is returned to its original state with no resources remaining. The pipeline YAML file in Repos will reflect the Delete script as its final committed version.
 
 ---
 
@@ -426,16 +288,13 @@ The VM is stopped via pipeline and then started via pipeline. At the end of this
 | Task | What You Practice | Azure Service Used | Makes Changes | Revert Required |
 |---|---|---|---|---|
 | Task 1 | Portal navigation, Resource Group exploration | Azure Portal, Resource Groups | No | No |
-| Task 2 | VM properties, ARM JSON view | Azure Virtual Machines | No | No |
-| Task 3 | RBAC role reading, IAM exploration | Access Control (IAM) | No | No |
-| Task 4 | Role assignment and removal at RG level | Access Control (IAM), RBAC | Yes | Yes - Remove Reader role from user |
-| Task 5 | ARM template export and reading | Azure Virtual Machines, ARM | No | No |
-| Task 6 | Resource Group creation and deletion | Resource Groups | Yes | Yes - Delete the new RG |
-| Task 7 | Service Principal exploration, Entra ID | Microsoft Entra ID | No | No |
-| Task 8 | SP RBAC assignment at Subscription level | Access Control (IAM), Subscriptions, RBAC | Yes | Yes - Remove Reader role from SP |
-| Task 9 | Service Connection setup | Azure DevOps Project Settings | Yes (DevOps only) | No |
-| Task 10 | YAML pipeline creation and execution | Azure DevOps Repos, Pipelines | Yes (DevOps only) | No |
-| Task 11 | VM start/stop via pipeline automation | Azure DevOps Pipelines, Azure CLI, VMs | Yes | Yes - Start VM back to Running |
+| Task 2 | RBAC role reading, IAM exploration | Access Control (IAM) | No | No |
+| Task 3 | Role assignment and removal at RG level | Access Control (IAM), RBAC | Yes | Yes - Remove Reader role from user ||
+| Task 4 | Service Principal exploration, Entra ID | Microsoft Entra ID | No | No |
+| Task 5 | SP RBAC assignment at Subscription level | Access Control (IAM), Subscriptions, RBAC | Yes | Yes - Remove Reader role from SP |
+| Task 6 | Service Connection setup | Azure DevOps Project Settings | Yes (DevOps only) | No |
+| Task 7 | YAML pipeline creation and execution | Azure DevOps Repos, Pipelines | Yes (DevOps only) | No |
+| Task 8 | Deploy Azure Resources from ARM Template via Pipeline and Clean Up | Azure DevOps Pipelines, Azure CLI, VMs | Yes | Yes - Start VM back to Running |
 
 ---
 

@@ -1,22 +1,22 @@
-# Task 7: Start and Stop the VM via Pipeline - Restore to Running State
+# Task 7: Run a Pipeline Using the Service Connection
 
 **Difficulty:** Intermediate  
-**Estimated Time:** 30-35 Minutes  
-**Type:** Hands-On Change with Full Revert (You will stop the VM via pipeline and then start it again to restore the original running state)
+**Estimated Time:** 25-30 Minutes  
+**Type:** Hands-On Configuration (Creates a pipeline and runs it — does not modify any Azure resources)
 
 ---
 
 ## Objective
 
-In this task, you will modify your existing YAML pipeline to send a **stop command** to your pre-deployed Linux Virtual Machine using Azure CLI. You will observe the VM changing its state in the Azure Portal. You will then update the pipeline again to **start the VM**, restoring it back to the Running state it was in before this task began.
+In this task, you will create a YAML pipeline inside Azure DevOps, connect it to your Azure subscription using the Service Connection you created in Task 8, and run it. The pipeline will authenticate to Azure using your Service Principal and list the resources inside your Resource Group. This is a read-only pipeline — it will not create, modify, or delete anything in Azure.
 
 ---
 
 ## Pre-Requisites
 
 Before starting this task, make sure you have completed:
-- Task 5: Create a Service Connection in Azure DevOps
-- Task 6: Run a Pipeline Using the Service Connection
+- Task 4: Locate Your Service Principal Details
+- Task 6: Create a Service Connection in Azure DevOps
 
 Have the following ready from your Lab Environment Page:
 
@@ -26,496 +26,528 @@ Have the following ready from your Lab Environment Page:
 | Azure DevOps Username | Lab Environment Page |
 | Azure DevOps Password | Lab Environment Page |
 | Your Resource Group Name | Lab Environment Page (e.g., rg-participant-john) |
-| Your VM Name | Lab Environment Page or from Task 2 notes |
 | Service Connection Name | azure-sp-connection (created in Task 8) |
 
 ---
 
-## Quick Background: VM Power States in Azure
+## Quick Background: What Is a YAML Pipeline?
 
-A Virtual Machine in Azure can be in several different power states:
+A pipeline in Azure DevOps is a set of automated instructions that run in sequence. In modern Azure DevOps, pipelines are written in a format called **YAML** (Yet Another Markup Language) — a simple text-based format that uses indentation to define structure.
 
-| Power State | What It Means | Are You Billed for Compute? |
-|---|---|---|
-| Running | VM is fully on and operational | Yes |
-| Stopping | VM is in the process of shutting down | Yes (briefly) |
-| Stopped | VM was shut down from inside the OS but is still allocated | Yes |
-| Deallocated | VM is fully stopped and compute resources released | No |
-| Starting | VM is in the process of booting up | Yes (briefly) |
+When you run a pipeline:
 
-When you use the Azure CLI command `az vm stop`, Azure performs a **deallocate** — meaning the VM is stopped AND compute resources are released. This is different from just shutting down the OS.
+1. Azure DevOps reads your YAML file from the repository
+2. It provisions a temporary virtual machine called an **agent** to run your steps
+3. The agent executes each step in order
+4. Logs are captured and shown to you in real time
+5. The agent is discarded after the pipeline finishes
 
-In real projects, teams use automated pipelines to stop VMs at the end of the working day and start them again in the morning — this saves significant compute costs in non-production environments.
+The pipeline in this task will use the **AzureCLI** task — a built-in Azure DevOps task that authenticates to Azure using your Service Connection and then runs Azure CLI commands on your behalf.
 
 ---
 
-## Part A: Verify the VM Is Running Before You Begin
+## Step-by-Step Instructions
 
 ---
 
-### Step 1: Log In to the Azure Portal
+### Step 1: Log In to Azure DevOps
 
 1. Open your web browser
-2. Go to:
+2. In the address bar, type the Azure DevOps Organization URL from your Lab Details Page
+   - Example: `https://dev.azure.com/contoso-lab`
+3. Press Enter
+4. Enter your Azure DevOps Username and click Next
+5. Enter your Azure DevOps Password and click Sign in
+6. If prompted with "Stay signed in?", click No
+
+---
+
+<img src="./images/Screenshot 2026-03-31 090612.png">
+
+---
+
+### Step 2: Open Your Project
+
+1. After signing in, you will land on the Azure DevOps organization home page
+2. You will see your project listed (e.g., contoso-lab-john)
+3. Click on your project name to open it
+
+---
+
+<img src="./images/Screenshot 2026-03-31 090916.png">
+
+---
+
+### Step 3: Navigate to Repos
+
+1. On the left sidebar of your project, look for the navigation menu
+2. Click on **Repos**
+3. The Repos section will open — this is where your code and pipeline files are stored
+
+---
+
+<img src="./images/Screenshot 2026-03-31 104208.png">
+
+---
+
+### Step 4: Initialize the Repository
+
+1. If the repository is empty, you will see a page that says "Initialize your repository" or "This repository is empty"
+2. Scroll down and find the **Initialize** button
+3. Make sure the option to add a README is checked
+4. Click the **Initialize** button
+
+> Note: If the repository already has files in it, skip this step and proceed directly to Step 5.
+
+---
+
+<img src="./images/Screenshot 2026-03-31 104259.png">
+
+---
+
+### Step 5: Confirm the Repository Is Initialized
+
+1. After initializing, you will see the repository with at least one file — usually a README.md
+2. The file tree will be visible on the left
+3. You are now ready to create a new pipeline file
+
+---
+
+<img src="./images/Screenshot 2026-03-31 105309.png">
+
+---
+
+### Step 6: Create a New File in the Repository
+
+1. On the Repos page, look at the top-right area near the file listing
+2. Click on the three dots (...) or the **+ Add** button/dropdown near the top of the file listing area
+3. From the dropdown, select **New file**
+
+---
+
+<img src="./images/Screenshot 2026-03-31 105358.png">
+
+---
+
+### Step 7: Name the New File
+
+1. A dialog box or an inline text field will appear asking for the file name
+2. Type the following name exactly:
 
 ```
-https://portal.azure.com
+azure-pipeline.yml
 ```
 
-3. Enter your Username from the Lab Details Page and click Next
-4. Enter your Password and click Sign in
-5. If prompted with "Stay signed in?", click No
+3. Make sure the name ends with `.yml` — this is important for Azure DevOps to recognize it as a pipeline file
+4. Click **Create** or press Enter to confirm
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of the Azure Portal login page]
+<img src="./images/Screenshot 2026-03-31 105520.png">
 
 ---
 
-### Step 2: Navigate to Your Resource Group
+### Step 8: Enter the Pipeline Code
 
-1. Click the Search Bar at the top of the Azure Portal home page
-2. Type: Resource Groups
-3. Click Resource Groups from the dropdown
-4. Find and click your Resource Group name (e.g., rg-participant-john)
+1. The file editor will open with a blank canvas
+2. Click inside the editor area
+3. First, clear any default content if any is present
+4. Type or paste the following YAML content exactly as shown below
 
----
+> Important: YAML is sensitive to indentation. Every space matters. Do not use tabs — use spaces only. Copy and paste is recommended to avoid errors.
 
-> [IMAGE PLACEHOLDER - Screenshot of the Resource Groups search result and the participant's RG highlighted in the list]
+```yaml
+trigger: none
 
----
+pool:
+  name: Default
 
-### Step 3: Open Your Linux Virtual Machine
+steps:
+- task: AzureCLI@2
+  displayName: 'Authenticate and List Resources'
+  inputs:
+    azureSubscription: 'azure-sp-connection'
+    scriptType: 'bash'
+    scriptLocation: 'inlineScript'
+    inlineScript: |
+      echo "============================================"
+      echo "Authenticated Account Details"
+      echo "============================================"
+      az account show --output table
+      echo ""
+      echo "============================================"
+      echo "Resources Inside My Resource Group"
+      echo "============================================"
+      az resource list --resource-group ODL-azure-Contoso-2157974 --output table
+```
 
-1. Inside your Resource Group, look at the resources list
-2. Find the resource where the Type column says Virtual machine
-3. Click on the VM name to open it
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Resource Group overview with the Virtual Machine resource highlighted in the resources list]
-
----
-
-### Step 4: Confirm the VM is in Running State
-
-1. On the VM Overview page, look at the top section
-2. Find the field labeled Status
-3. It should currently say Running
-4. Note this down — this is the state you must restore at the end of this task
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Virtual Machine Overview page with the Status field showing "Running" highlighted with a label]
-
----
-
-## Part B: Modify the Pipeline to Stop the VM
+5. In the last line, replace `YOUR-RESOURCE-GROUP-NAME` with your actual Resource Group name from the Lab Details Page
+   - Example: if your RG is `ODL-azure-Contoso-2157974`, the line should read:
+   - `az resource list --resource-group ODL-azure-Contoso-2157974 --output table`
 
 ---
 
-### Step 5: Log In to Azure DevOps
+<img src="./images/Screenshot 2026-03-31 105848.png">
+
+---
+
+### Step 9: Understand What Each Line of the Pipeline Does
+
+Before saving, take a moment to understand what you have written:
+
+| Line / Section | What It Does |
+|---|---|
+| `trigger: none` | This pipeline will NOT run automatically. It only runs when you manually trigger it |
+| `pool: vmImage: ubuntu-latest` | Azure DevOps will create a temporary Ubuntu Linux virtual machine to run this pipeline |
+| `task: AzureCLI@2` | This is a built-in task that authenticates to Azure and then runs Azure CLI commands |
+| `azureSubscription: 'azure-sp-connection'` | This tells the task to use the Service Connection you created in Task 8 to authenticate |
+| `scriptType: bash` | The script will be written in Bash (Linux shell language) |
+| `az account show` | This Azure CLI command prints the details of the authenticated account (SP identity) |
+| `az resource list` | This Azure CLI command lists all resources inside your specified Resource Group |
+
+
+
+---
+
+### Step 10: Commit the File to the Repository
+
+1. After entering the YAML content, look for the **Commit** button at the top right of the editor
+2. Click **Commit**
+3. A dialog box will appear asking for a commit message
+4. In the commit message field, type:
+
+```
+Add initial pipeline file for resource listing
+```
+
+5. Leave the branch as **main** (or **master** — whichever is shown)
+6. Make sure "Commit directly to the main branch" is selected
+7. Click the **Commit** button inside the dialog to save
+
+---
+
+<img src="./images/Screenshot 2026-03-31 110000.png">
+
+---
+
+### Step 11: Confirm the File Was Committed
+
+1. After committing, you will be taken back to the Repos file listing
+2. You should now see two files in your repository:
+   - README.md
+   - azure-pipeline.yml
+3. Click on **azure-pipeline.yml** to confirm its contents look correct
+
+---
+
+<img src="./images/Screenshot 2026-03-31 110038.png">
+
+---
+
+### Step 12: Create a PAT token
+1. Navigate to the User settings from the top right corner.
+---
+<img src="./images/Screenshot 2026-03-31 120318.png">
+
+
+2. Select the option Personal access token.
+---
+<img src="./images/Screenshot 2026-03-31 120527.png">
+---
+
+3. Click on **+ New Token**
+4. Provide the name as `agent-token`.
+5. At scope provide the full access.
+---
+
+<img src="./images/Screenshot 2026-03-31 120928.png">
+
+---
+
+6. Make sure that after creating the token copy the token and store it some where on notepad.'
+
+
+> **Note:** If the token missed you can regenerate the token from the same PAT page it self.
+
+### Step 13: Connect with the VM
+1. Get on to the Azure portal page.
+2. Search for the VM.
+3. Enter into the VM that is present there.
+4. Check weather the VM is in running or else stop state.
+5. If the VM is in stop state just try to start it.
+6. Later access the VM from the terminal command using:
+``` bash
+ssh <username>@<DNSName>
+```
+7. Map the details of the command like username with your VM username and DNSName with your VM DNSName from Environment page.
+
+---
+
+<img src="./images/Screenshot 2026-03-31 124313.png">
+
+---
+8. Enter `yes` after clicking enter.
+9. Enter the password that you see in the environment page.
+
+>**Note:**You are unable to see the password while entering so carefully enter the password.
+
+---
+
+### Step 14: Updating the packages of the Vm
+
+1. Run the below command to update the packages.
+``` bash
+sudo apt update
+```
+
+### Step 15: Creating the default runner.
+1. Navigate to the azure devops portal by searching  `Azure Devops Organization` in the azure portal.
+2. Click on the organization that is available and enter into the project as well.
+3. At bottom left bottom search for the `Project Settings`. 
+4. Select the `Agent pools` under the `Pipelines` section.
+--- 
+
+<img src="./images/Screenshot 2026-03-31 125721.png">
+
+---
+5. Click on the Default under Agent pools.
+
+### Step 16: Adding the agent to the VM.
+1. Click on the `Agents` tab.
+2. Click on `Add Agent`. 
+---
+
+<img src="./images/Screenshot 2026-03-31 130049.png">
+
+---
+
+3. After that you will see a new tab select the `Linux` from the tab.
+
+4. Click on the copy icon after the Download option. 
+
+---
+
+<img src="./images/Screenshot 2026-03-31 130315.png">
+
+---
+
+### Step 17: Setting up the agent configurations to the VM.
+1. In the Virtual machine run below command.
+``` bash
+wget <link you copied>
+```
+  - Example: 
+   wget https://download.agent.dev.azure.com/agent/4.271.0/vsts-agent-linux-x64-4.271.0.tar.gz
+
+2. List the files and you will be some kind of file like `vsts-agent-linux-x64-4.271.0.tar.gz`.
+3. Now run the command to decompress the file.
+``` bash
+tar -xf <compressed folder name>
+```
+  - Example: tar -xf vsts-agent-linux-x64-4.271.0.tar.gz
+4. Now list out all the files and you can see files like: config.sh, run.sh, etc.
+5. Run the below command in the virtual machine
+``` bash
+./config.sh
+```
+  - Enter (Y/N) Accept the Team Explorer Everywhere license agreement now? (press enter for N) > `Type y and enter`.
+  - Enter server URL > `Enter the azure devops page URL only with till the organiation name`.
+    - Example: `https://dev.azure.com/odluser2157974`
+  - Enter authentication type (press enter for PAT) > `Press enter`
+  - Enter personal access token > `Enter the PAT token that you have created in Step 12`.
+  - Enter agent pool (press enter for default) > `press enter for default`.
+  - Enter agent name (press enter for demo-vm) > `Press enter for default`.
+  - Enter work folder (press enter for _work) > `Press enter for Default`.
+---
+
+<img src="./images/Screenshot 2026-03-31 132310.png">
+
+---
+
+6. Now you can see an agent created in the agent pool page with the offline status as below.
+---
+
+<img src="./images/Screenshot 2026-03-31 132602.png">
+
+---
+7. To make the agent to be in online run the below command and check the status in the agent pools.
+``` bash
+./run.sh
+```
+---
+<img src="./images/Screenshot 2026-03-31 132813.png">
+
+---
+8. Now you can see the agent in the online state.
+
+---
+
+### Step 18: Navigate to Pipelines
+
+1. In the left sidebar, click on **Pipelines**
+2. The Pipelines section will open
+3. If no pipelines exist yet, you will see a "Create Pipeline" prompt or an empty list
+4. Click **New pipeline** or **Create Pipeline**
+
+---
+
+<img src="./images/Screenshot 2026-03-31 110158.png">
+
+---
+
+### Step 19: Select the Code Source
+
+1. A page titled "Where is your code?" will appear
+2. You will see several source options:
+   - Azure Repos Git
+   - GitHub
+   - Bitbucket Cloud
+   - Other Git
+3. Click on **Azure Repos Git** since your YAML file is stored in the Azure Repos repository you just edited
+
+---
+
+<img src="./images/Screenshot 2026-03-31 110339.png">
+
+---
+
+### Step 20: Select Your Repository
+
+1. A list of repositories in your project will appear
+2. Click on your repository name (it will match your project name, e.g., contoso-lab-john)
+
+---
+
+<img src="./images/Screenshot 2026-03-31 110250.png">
+
+---
+
+### Step 21: Select the Existing YAML File
+
+1. The next page will ask "Configure your pipeline"
+2. You will see several options:
+   - Starter pipeline
+   - Existing Azure Pipelines YAML file
+   - Other options
+3. Click on **Existing Azure Pipelines YAML file**
+
+---
+
+<img src="./images/Screenshot 2026-03-31 110434.png">
+
+---
+
+### Step 22: Select the azure-pipeline.yml File
+
+1. A panel will slide open on the right
+2. In the **Branch** dropdown, make sure **main** (or master) is selected
+3. In the **Path** dropdown, select **/azure-pipeline.yml**
+4. Click the **Continue** button
+
+---
+
+<img src="./images/Screenshot 2026-03-31 110508.png">
+
+---
+
+### Step 23: Review the Pipeline YAML Before Running
+
+1. Azure DevOps will show you a preview of your YAML file
+2. Read through it and confirm:
+   - `azureSubscription` says `azure-sp-connection`
+   - The resource group name in the last line matches your actual RG name
+3. If everything looks correct, click the **Run** button at the top right
+
+---
+
+<img src="./images/Screenshot 2026-03-31 110715.png">
+
+---
+
+### Step 24: Watch the Pipeline Run in Real Time
+
+1. After clicking Run, you will be taken to the **Pipeline Run** page
+2. You will see a summary showing:
+   - The job status (Queued, Running, Succeeded, Failed)
+   - A job named "Job" under the run
+3. Click on the **Job** link to see the detailed logs
+4. Watch as each step executes in real time:
+   - First, the agent is provisioned (this takes about 30-60 seconds)
+   - Then "Authenticate and List Resources" step runs
+   - Output will appear in the log panel
+
+---
+
+<img src="./images/Screenshot 2026-03-31 133612.png">
+
+---
+
+### Step 25: Permit the pipeline to run
+1. Click on the view or else job that shown in the stages section.
+---
+
+<img src="./images/Screenshot 2026-03-31 133703.png">
+
+---
+2. Click on the permit buttom once below page is popped up.
+
+---
+
+<img src="./images/Screenshot 2026-03-31 133721.png">
+
+---
+
+### Step 26: Read the Pipeline Output Logs
+
+1. After the job completes (status changes to "Succeeded" with a green checkmark), click on the step named **"Authenticate and List Resources"**
+2. The log output will expand and you should see something like this:
+
+```
+============================================
+Authenticated Account Details
+============================================
+EnvironmentName    HomeTenantId    IsDefault    Name                              State    TenantId
+-----------------  --------------  -----------  --------------------------------  -------  --------
+Azure              xxxxxxxx-xxxx   True         Contoso-Training-Subscription     Enabled  xxxxxxxx
+
+============================================
+Resources Inside My Resource Group
+============================================
+Name              ResourceGroup         Location    Type
+----------------  --------------------  ----------  ----------------------------------
+your-vm-name      rg-participant-john   eastus      Microsoft.Compute/virtualMachines
+```
+
+3. Confirm the following in the output:
+   - The subscription name matches what is on your Lab Details Page
+   - Your Resource Group name appears in the resources list
+   - Your Linux VM is listed as a resource of type `Microsoft.Compute/virtualMachines`
+
+---
+
+<img src="./images/Screenshot 2026-03-31 143518.png">
+
+---
+
+### Step 27: Confirm the Pipeline Run Status Is "Succeeded"
+
+1. Click the back arrow or the pipeline name breadcrumb to go back to the run summary page
+2. The overall status should show **Succeeded** with a green checkmark
+3. Note the run duration shown — this tells you how long the pipeline took from start to finish
+
+---
+
+<img src="./images/Screenshot 2026-03-31 143621.png">
+
+---
+
+### Step 21: Verify No Azure Resources Were Changed
 
 1. Open a new browser tab
-2. Go to the Azure DevOps Organization URL from your Lab Details Page
-3. Enter your Azure DevOps Username and click Next
-4. Enter your Password and click Sign in
-5. Open your project (e.g., contoso-lab-john)
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Azure DevOps project home page after login]
-
----
-
-### Step 6: Navigate to Repos and Open the Pipeline File
-
-1. In the left sidebar, click Repos
-2. In the file listing, find and click on azure-pipeline.yml
-3. The file will open showing the YAML content from Task 9
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Repos file listing with azure-pipeline.yml visible and highlighted]
-
----
-
-### Step 7: Open the File for Editing
-
-1. With azure-pipeline.yml open and its content visible on screen
-2. Look for the **Edit** button at the top right of the file viewer
-3. Click **Edit**
-4. The file will switch to edit mode and you can now modify the content
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the azure-pipeline.yml file view with the Edit button highlighted at the top right]
-
----
-
-### Step 8: Replace the Pipeline Content with the Stop VM Script
-
-1. Select all the existing content in the editor (press Ctrl+A to select all)
-2. Delete the selected content
-3. Type or paste the following YAML exactly as shown below
-
-> Important: Replace YOUR-RESOURCE-GROUP-NAME with your actual Resource Group name and YOUR-VM-NAME with your actual VM name from your Lab Details Page.
-
-```yaml
-trigger: none
-
-pool:
-  vmImage: ubuntu-latest
-
-steps:
-- task: AzureCLI@2
-  displayName: 'Stop the Virtual Machine'
-  inputs:
-    azureSubscription: 'azure-sp-connection'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      echo "============================================"
-      echo "Stopping the Virtual Machine"
-      echo "============================================"
-      az vm stop \
-        --resource-group YOUR-RESOURCE-GROUP-NAME \
-        --name YOUR-VM-NAME
-      echo ""
-      echo "Stop command sent. Checking VM status..."
-      echo ""
-      az vm show \
-        --resource-group YOUR-RESOURCE-GROUP-NAME \
-        --name YOUR-VM-NAME \
-        --show-details \
-        --query "powerState" \
-        --output tsv
-      echo ""
-      echo "VM stop operation completed."
-```
-
-4. Confirm that:
-   - Both occurrences of YOUR-RESOURCE-GROUP-NAME are replaced with your actual RG name
-   - Both occurrences of YOUR-VM-NAME are replaced with your actual VM name
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the editor with the Stop VM YAML content pasted in, with the resource group and VM name fields replaced and visible]
-
----
-
-### Step 9: Understand What the Stop Pipeline Does
-
-Before committing, understand each part of the new script:
-
-| Command / Section | What It Does |
-|---|---|
-| `az vm stop` | Sends a stop and deallocate command to the specified VM |
-| `--resource-group` | Specifies which Resource Group the VM lives in |
-| `--name` | Specifies the name of the VM to stop |
-| `az vm show` | Retrieves the current details of the VM after the stop command |
-| `--show-details` | Includes live power state information in the output |
-| `--query "powerState"` | Filters the output to show only the power state field |
-| `--output tsv` | Outputs the result as plain text (Tab Separated Values) |
-
----
-
-### Step 10: Commit the Updated Pipeline File
-
-1. Click the **Commit** button at the top right of the editor
-2. A commit dialog will appear
-3. In the commit message field, type:
-
-```
-Update pipeline to stop the Virtual Machine
-```
-
-4. Leave the branch as main
-5. Select "Commit directly to the main branch"
-6. Click the **Commit** button inside the dialog
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Commit dialog with the commit message "Update pipeline to stop the Virtual Machine" typed in and the Commit button visible]
-
----
-
-### Step 11: Navigate to Pipelines and Run the Pipeline
-
-1. In the left sidebar, click **Pipelines**
-2. You will see your pipeline listed (it may be named after your repository or shown as "azure-pipeline.yml")
-3. Click on the pipeline name to open it
-4. Click the **Run pipeline** button at the top right
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Pipelines section with the pipeline listed and the "Run pipeline" button highlighted at the top right]
-
----
-
-### Step 12: Confirm the Run Settings and Start
-
-1. A side panel will appear showing run options
-2. Leave all settings as default
-3. Click the **Run** button at the bottom of the panel to start the pipeline
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the "Run pipeline" side panel with default settings and the Run button at the bottom highlighted]
-
----
-
-### Step 13: Watch the Stop Pipeline Run
-
-1. You will be taken to the Pipeline Run page
-2. The job will first show as Queued, then Running
-3. Click on the Job link to watch the detailed logs
-4. The pipeline will take 2-4 minutes to complete because stopping a VM takes time
-5. Watch for these log messages to appear:
-   - "Stopping the Virtual Machine"
-   - "Stop command sent. Checking VM status..."
-   - A final line showing the VM power state
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the pipeline job logs showing the "Stopping the Virtual Machine" message and the progress of the az vm stop command running]
-
----
-
-### Step 14: Read the Final Output of the Stop Pipeline
-
-1. After the pipeline completes successfully, look at the final lines of the log
-2. You should see output similar to:
-
-```
-Stopping the Virtual Machine
-Stop command sent. Checking VM status...
-
-VM deallocated
-
-VM stop operation completed.
-```
-
-3. The text **VM deallocated** confirms the VM has been fully stopped and its compute resources have been released
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the completed pipeline log showing the final output including "VM deallocated" text]
-
----
-
-### Step 15: Verify the VM State in the Azure Portal
-
-1. Switch back to the Azure Portal browser tab
-2. Navigate to your Resource Group and click on your Virtual Machine
-3. On the VM Overview page, look at the **Status** field
-4. It should now show **Stopped (deallocated)**
-
-> Note: If the portal still shows Running, wait 30 seconds and click the Refresh button at the top of the VM overview page. The portal may take a moment to reflect the latest state.
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Virtual Machine Overview page in the Azure Portal showing Status = "Stopped (deallocated)" highlighted]
-
----
-
-## Part C: Modify the Pipeline to Start the VM (Revert to Default)
-
----
-
-### Step 16: Go Back to Azure DevOps and Open the Pipeline File for Editing
-
-1. Switch back to the Azure DevOps browser tab
-2. In the left sidebar, click **Repos**
-3. Click on **azure-pipeline.yml** to open it
-4. Click the **Edit** button to enter edit mode
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Repos section with azure-pipeline.yml open and the Edit button highlighted]
-
----
-
-### Step 17: Replace the Pipeline Content with the Start VM Script
-
-1. Select all content in the editor (press Ctrl+A)
-2. Delete the selected content
-3. Type or paste the following YAML exactly as shown below
-
-> Important: Replace YOUR-RESOURCE-GROUP-NAME and YOUR-VM-NAME with your actual values, exactly as you did in Step 8.
-
-```yaml
-trigger: none
-
-pool:
-  vmImage: ubuntu-latest
-
-steps:
-- task: AzureCLI@2
-  displayName: 'Start the Virtual Machine'
-  inputs:
-    azureSubscription: 'azure-sp-connection'
-    scriptType: 'bash'
-    scriptLocation: 'inlineScript'
-    inlineScript: |
-      echo "============================================"
-      echo "Starting the Virtual Machine"
-      echo "============================================"
-      az vm start \
-        --resource-group YOUR-RESOURCE-GROUP-NAME \
-        --name YOUR-VM-NAME
-      echo ""
-      echo "Start command sent. Checking VM status..."
-      echo ""
-      az vm show \
-        --resource-group YOUR-RESOURCE-GROUP-NAME \
-        --name YOUR-VM-NAME \
-        --show-details \
-        --query "powerState" \
-        --output tsv
-      echo ""
-      echo "VM start operation completed."
-```
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the editor with the Start VM YAML content pasted in, with resource group and VM name replaced]
-
----
-
-### Step 18: Understand What the Start Pipeline Does
-
-| Command / Section | What It Does |
-|---|---|
-| `az vm start` | Sends a start command to the specified VM — allocates compute and boots the OS |
-| `--resource-group` | Specifies which Resource Group the VM lives in |
-| `--name` | Specifies the name of the VM to start |
-| `az vm show` | Retrieves the current details of the VM after the start command |
-| `--query "powerState"` | Filters the output to show only the power state field |
-| `--output tsv` | Outputs the result as plain text |
-
----
-
-### Step 19: Commit the Start VM Pipeline File
-
-1. Click the **Commit** button at the top right of the editor
-2. In the commit message field, type:
-
-```
-Update pipeline to start the Virtual Machine and restore running state
-```
-
-3. Leave the branch as main
-4. Select "Commit directly to the main branch"
-5. Click the **Commit** button inside the dialog
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Commit dialog with the commit message about starting the VM and the Commit button visible]
-
----
-
-### Step 20: Navigate to Pipelines and Run the Start Pipeline
-
-1. In the left sidebar, click **Pipelines**
-2. Click on your pipeline name
-3. Click the **Run pipeline** button at the top right
-4. In the side panel, leave all settings as default
-5. Click **Run**
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Pipelines section with the Run pipeline button highlighted and the run options panel visible]
-
----
-
-### Step 21: Watch the Start Pipeline Run
-
-1. You will be taken to the Pipeline Run page
-2. Click on the **Job** link to see detailed logs
-3. The pipeline will take 2-4 minutes because starting a VM (booting the OS) takes time
-4. Watch for these messages in the logs:
-   - "Starting the Virtual Machine"
-   - "Start command sent. Checking VM status..."
-   - The final power state output
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the pipeline job logs showing the "Starting the Virtual Machine" message and the progress of the az vm start command]
-
----
-
-### Step 22: Read the Final Output of the Start Pipeline
-
-1. After the pipeline completes, look at the final lines of the log
-2. You should see output similar to:
-
-```
-Starting the Virtual Machine
-Start command sent. Checking VM status...
-
-VM running
-
-VM start operation completed.
-```
-
-3. The text **VM running** confirms the VM has been fully started and is operational again
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the completed pipeline log showing the final output including "VM running" text and the Succeeded status]
-
----
-
-### Step 23: Verify the VM Is Back to Running State in the Azure Portal
-
-1. Switch back to the Azure Portal browser tab
-2. Navigate to your Resource Group and click on your Virtual Machine
-3. On the VM Overview page, look at the **Status** field
-4. It should now show **Running**
-
-> Note: If the portal still shows Stopped (deallocated), wait 30 seconds and click the Refresh button. The portal may take a moment to update.
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Virtual Machine Overview page in the Azure Portal showing Status = "Running" — confirming the VM has been restored to its original state]
-
----
-
-### Step 24: Compare the Pipeline Run History
-
-1. Switch back to Azure DevOps
-2. In the left sidebar, click **Pipelines**
-3. Click on your pipeline name
-4. You will see the **Run History** — a list of all times this pipeline was run
-5. You should see at least two completed runs:
-   - One run for the Stop operation
-   - One run for the Start operation
-6. Both should show a green Succeeded status
-7. Click on each run to see its individual logs if you want to review them
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the pipeline Run History showing two successful runs — one labeled with the Stop commit message and one with the Start commit message]
-
----
-
-### Step 25: Final Verification Summary
-
-Confirm the following before marking this task complete:
-
-| Check | Expected Result | Confirmed |
-|---|---|---|
-| VM Status in Azure Portal | Running | |
-| Stop pipeline run status | Succeeded | |
-| Start pipeline run status | Succeeded | |
-| Stop pipeline log output | Shows "VM deallocated" | |
-| Start pipeline log output | Shows "VM running" | |
-| No extra resources created | Resource Group has the same resources as before | |
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot showing both the Azure Portal VM status as Running and the Azure DevOps pipeline run history side by side]
+2. Go to `https://portal.azure.com`
+3. Navigate to your Resource Group
+4. Confirm the resources inside are exactly the same as before you ran the pipeline
+5. No new resources have been created — the pipeline only read data, it did not create anything
 
 ---
 
@@ -524,22 +556,19 @@ Confirm the following before marking this task complete:
 Before marking this task as complete, confirm you have done all of the following:
 
 ```
-[ ] Verified the VM was in Running state before starting
-[ ] Logged in to Azure DevOps
-[ ] Opened and edited azure-pipeline.yml in Repos
-[ ] Replaced pipeline content with the Stop VM script
-[ ] Replaced both resource group name and VM name placeholders correctly
-[ ] Committed the Stop pipeline file with a descriptive commit message
-[ ] Ran the Stop pipeline and watched the logs
-[ ] Confirmed the log output showed "VM deallocated"
-[ ] Verified in Azure Portal that VM status changed to "Stopped (deallocated)"
-[ ] Went back to Repos and edited azure-pipeline.yml again
-[ ] Replaced pipeline content with the Start VM script
-[ ] Replaced both resource group name and VM name placeholders correctly
-[ ] Committed the Start pipeline file with a descriptive commit message
-[ ] Ran the Start pipeline and watched the logs
-[ ] Confirmed the log output showed "VM running"
-[ ] Verified in Azure Portal that VM status returned to "Running"
-[ ] Reviewed the pipeline Run History and confirmed both runs succeeded
+[ ] Logged in to Azure DevOps successfully
+[ ] Opened your project and navigated to Repos
+[ ] Initialized the repository if it was empty
+[ ] Created a new file named azure-pipeline.yml
+[ ] Entered the YAML content correctly with the right resource group name
+[ ] Committed the file to the main branch
+[ ] Navigated to Pipelines and created a new pipeline
+[ ] Selected Azure Repos Git as the code source
+[ ] Selected the existing azure-pipeline.yml file
+[ ] Reviewed the YAML and clicked Run
+[ ] Watched the pipeline run in real time
+[ ] Read the logs and confirmed the subscription name and VM appeared
+[ ] Confirmed the pipeline status shows Succeeded
+[ ] Verified no Azure resources were created or changed
 ```
 ---

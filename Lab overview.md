@@ -3,8 +3,8 @@
 **Lab Title:** Azure DevOps with Azure Infrastructure - End-to-End Hands-On Lab  
 **Client:** Contoso Innovations Inc.  
 **Difficulty:** Beginner to Intermediate  
-**Total Tasks:** 11  
-**Total Estimated Duration:** 4 to 5 Hours  
+**Total Tasks:** 7  
+**Total Estimated Duration:** 8 to 10 Hours  
 **Lab Type:** Guided Hands-On
 
 ---
@@ -26,14 +26,10 @@ When you receive your Lab Details Page, your environment has already been provis
 - A dedicated Azure Resource Group scoped to your name
 - A Linux Virtual Machine deployed inside that Resource Group using an ARM template
 - A Service Principal created in Microsoft Entra ID with Contributor access to your Resource Group
-- All Service Principal credentials captured and displayed on your Lab Details Page
+- All Service Principal credentials captured and displayed on your Lab Environments Page
 - An Azure DevOps Organization and a project pre-created for you
 
 You do not need to set up any of the above. Your job is to explore, understand, use, and build on top of what has been provisioned.
-
----
-
-> [IMAGE PLACEHOLDER - Diagram showing the overall lab architecture: Azure Tenant containing a Subscription, inside which is the participant's Resource Group with the Linux VM, Service Principal in Entra ID, and Azure DevOps Organization connected via Service Connection]
 
 ---
 
@@ -73,19 +69,11 @@ In this lab, Azure is the platform where your infrastructure lives. You will int
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of the Microsoft Azure home page showing the portal dashboard with common services visible]
-
----
-
 ### Azure Portal
 
 The Azure Portal is the web-based interface you use to manage all of your Azure resources. You access it by going to https://portal.azure.com in a browser. From the portal, you can create, view, modify, and delete Azure resources using a graphical point-and-click interface without needing to write any code.
 
 In this lab, you will use the Azure Portal to explore your Resource Group, check access controls, view your Virtual Machine, and verify changes made by your pipelines.
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Azure Portal home page with the search bar, left navigation, and resource tiles labeled]
 
 ---
 
@@ -112,10 +100,6 @@ In this lab, your Resource Group has been pre-created with a name like rg-partic
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of a Resource Group overview page showing its name, subscription, region, and the list of resources inside it]
-
----
-
 ### Azure Virtual Machine (VM)
 
 An Azure Virtual Machine is a software-based computer running inside Microsoft's data centers. It behaves exactly like a physical computer — it has an operating system, memory, CPU, storage, and a network connection — but it exists entirely in software and runs in the cloud.
@@ -130,10 +114,6 @@ Key VM terms you will encounter:
 - **Network Interface (NIC):** The virtual network card that connects the VM to a network
 - **Public IP Address:** The IP address used to reach the VM from the internet
 - **Power State:** Whether the VM is Running, Stopped, or Deallocated
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of a Virtual Machine overview page showing the VM name, status, size, operating system, and IP address fields]
 
 ---
 
@@ -180,10 +160,6 @@ In this lab, you will explore the RBAC assignments on your Resource Group, pract
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of the Access Control (IAM) page showing the Role Assignments tab with multiple entries visible including Type, Role, and Scope columns]
-
----
-
 ### RBAC Scope Inheritance
 
 When a role is assigned at the Subscription level, that role is inherited by all Resource Groups and all individual resources inside the Subscription. This is called scope inheritance. It means you do not need to go into each Resource Group and manually add the identity — assigning it once at the Subscription level covers everything underneath automatically.
@@ -216,10 +192,6 @@ In this lab, a Service Principal has been pre-created for you. Its credentials a
 
 ---
 
-> [IMAGE PLACEHOLDER - Screenshot of the App Registrations page in Microsoft Entra ID showing a Service Principal entry with Application (client) ID and Directory (tenant) ID fields visible]
-
----
-
 ### Client Secret
 
 A Client Secret is the password of a Service Principal. It is a long, randomly generated string that is paired with the Client ID to authenticate the Service Principal to Microsoft Entra ID.
@@ -245,10 +217,6 @@ Azure DevOps is a set of developer tools provided by Microsoft that supports the
 In this lab, you will use two specific parts of Azure DevOps:
 - **Repos:** Where your pipeline code files are stored
 - **Pipelines:** Where you create, configure, and run automated pipelines
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Azure DevOps project page showing the left sidebar with Repos, Pipelines, Boards, and other sections labeled]
 
 ---
 
@@ -301,10 +269,6 @@ A Service Connection is a saved, named, encrypted credential configuration store
 When a pipeline references a Service Connection by name (for example, azureSubscription: 'azure-sp-connection'), Azure DevOps retrieves the stored credentials, authenticates to the external service on behalf of the pipeline, and executes the task. The credentials themselves are never visible in the pipeline logs or code.
 
 In this lab, you will create a Service Connection that uses your pre-provisioned Service Principal credentials to link Azure DevOps to your Azure Subscription.
-
----
-
-> [IMAGE PLACEHOLDER - Screenshot of the Service Connections page in Azure DevOps Project Settings showing a service connection listed with Type = Azure Resource Manager and Status = Ready]
 
 ---
 

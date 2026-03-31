@@ -19,9 +19,8 @@ Before starting this task, make sure you have the following ready from your **La
 | Item | Where to Find It |
 |---|---|
 | Azure Portal Login URL | Lab Details Page |
-| Username | Lab Details Page |
-| Password | Lab Details Page |
-| Your Resource Group Name | Lab Details Page (e.g., `rg-participant-john`) |
+| Username | Lab Environment Page |
+| Password | Lab Environment Page |
 
 ---
 
@@ -47,7 +46,7 @@ https://portal.azure.com
 
 ### Step 2: Enter Your Username
 
-1. On the login screen, you will see a box that says **"Email, phone, or Skype"**
+1. On the login screen, you will see a box that says **"Username"**
 2. Type your **Username** exactly as it appears on your Lab Environment Page
 3. Click the **Next** button
 
@@ -61,7 +60,7 @@ https://portal.azure.com
 
 ---
 
-<img src="">
+<img src="./images/image.png">
 
 ---
 
@@ -82,7 +81,7 @@ https://portal.azure.com
 
 ---
 
-<img src="">
+<img src="./images/Screenshot 2026-03-30 212318.png">
 
 ---
 
@@ -94,7 +93,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the search bar with "Resource Groups" typed and the dropdown result highlighted]**
+<img src="./images/Screenshot 2026-03-30 212427.png">
 
 ---
 
@@ -102,79 +101,37 @@ https://portal.azure.com
 
 1. The **Resource Groups** page will open showing a list of resource groups
 2. Look through the list and find your resource group name from your Lab Details Page
-   - Example: `rg-participant-john`
+   - Example: `ODL-azure-Contoso-2157974`
 3. Click on your **Resource Group name** to open it
 
->  **Note:** You may see only one resource group in the list — that is yours. Do not click on any other resource group if multiple are visible.
+>  **Note:** You may see only two resource group in the list — that one is yours and other is related to network minitoring. Do not click on any other resource group if multiple are visible.
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Resource Groups list with the participant's RG highlighted and arrow pointing to it]**
+<img src="./images/Screenshot 2026-03-30 212829.png">
 
 ---
 
-### Step 8: Explore the Overview Tab
+### Step 8: Access the VM through the terminal
 
-1. After clicking on your Resource Group, you will land on the **Overview** tab automatically
-2. Look at the information displayed on this page and note down the following:
+1. on the search bar type for the virtual machines.
+<img src="./images/Screenshot 2026-03-30 213537.png">
 
-| Field | What to Look For | Your Value |
-|---|---|---|
-| **Subscription** | Name of the Azure subscription | |
-| **Region** | Location where the RG is hosted (e.g., East US) | |
-| **Resources count** | Number of resources inside the RG | |
+2. Open the virtual machine resource and open the virtual machine that is present.
+<img src="./images/Screenshot 2026-03-30 213624.png">
 
-3. In the **center of the page**, you will see a list of **Resources** — these are everything inside your RG
-4. You should see at least one resource — the **Linux Virtual Machine** that was pre-deployed for you
+3. In the overview page look for the DNS name and copy the DNS name along with that copy the username as well from the environment tab from the cloudlabs lab page.
+<img src="./images/Screenshot 2026-03-30 213714.png">
 
+4. Now Try to use terminal to enter into Virtual machine using below command.
+``` bash
+ssh <username>@<DNSName>
+```
+
+5. Try to replace username with the user name provided in environment page. And similarly replace  the DNS name with the name that you copied from overview page of the VM.
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Resource Group Overview tab with Subscription, Region, and Resources list labeled with arrows]**
-
----
-
-### Step 9: Understand What You See in the Resources List
-
-1. In the resources list, you will see columns: **Name**, **Type**, **Location**
-2. Find the row where **Type** says `Virtual machine` — this is your Linux VM
-3. You may also see related resources like:
-   - **Network Interface** — the virtual network card for the VM
-   - **Virtual Network** — the network the VM is connected to
-   - **Public IP Address** — the IP used to reach the VM from internet
-   - **OS Disk** — the storage disk attached to the VM
-   - **Network Security Group** — the firewall rules for the VM
-
->  **What this means:** Even though you deployed "just a VM", Azure automatically created several supporting resources. All of them live together inside your Resource Group.
-
----
-
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Resources list with each resource type labeled — VM, NIC, VNet, Public IP, Disk, NSG]**
-
----
-
-### Step 10: Check the Tags on Your Resource Group
-
-1. On the left-hand menu inside your Resource Group, scroll down and look for **Tags**
-2. Click on **Tags**
-3. You will see a list of key-value pairs that have been assigned to your RG, for example:
-
-| Tag Name | Tag Value |
-|---|---|
-| Environment | Training |
-| Owner | Your Name |
-| CostCenter | Lab |
-
-4. Read each tag and understand what it represents
-
-> 💡 **What this means:** Tags are labels attached to Azure resources. In real companies, tags are used to track which department a resource belongs to, who owns it, and what environment it is in (Dev, Test, Prod). They are also used for **cost reporting** — filtering bills by department or project.
-
----
-
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Tags section showing the key-value pairs for Environment, Owner, and CostCenter]**
-
----
-
-### Step 11: Go Back to Overview
+### Step 9: Go Back to Overview
 
 1. Click on **Overview** in the left menu to go back to the main Resource Group page
 2. At the top of the page, click on your **Subscription name** (it appears as a clickable link)
@@ -182,9 +139,6 @@ https://portal.azure.com
 
 > 💡 **What this means:** The hierarchy in Azure is: **Tenant → Subscription → Resource Group → Resources**. Your Resource Group sits inside a Subscription, which is the billing and access boundary.
 
----
-
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Overview tab with the Subscription name link highlighted and an arrow pointing to it]**
 
 ---
 
@@ -196,9 +150,6 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot showing the breadcrumb navigation at the top of the page with Resource Group link highlighted]**
-
----
 
 ## Task Completion Checklist
 

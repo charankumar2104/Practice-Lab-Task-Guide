@@ -19,10 +19,9 @@ Before starting this task, make sure you have the following ready from your **La
 | Item | Where to Find It |
 |---|---|
 | Azure Portal Login URL | Lab Details Page |
-| Username | Lab Details Page |
-| Password | Lab Details Page |
-| Your Resource Group Name | Lab Details Page (e.g., `rg-participant-john`) |
-| Your Service Principal Name or Client ID | Lab Details Page |
+| Username | Lab Environment Page |
+| Password | Lab Environment Page |
+| Your Service Principal Name or Client ID | Lab Environment Page |
 
 ---
 
@@ -60,9 +59,7 @@ https://portal.azure.com
 5. If prompted with **"Stay signed in?"**, click **No**
 
 ---
-
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Azure Portal login page with username and password fields visible]**
-
+<img src="./images/Screenshot 2026-03-30 212318.png">
 ---
 
 ### Step 2: Navigate to Resource Groups
@@ -74,19 +71,19 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the search bar with "Resource Groups" typed and the result highlighted in the dropdown]**
+<img src="./images/Screenshot 2026-03-30 212427.png">
 
 ---
 
 ### Step 3: Open Your Resource Group
 
 1. In the Resource Groups list, locate your resource group
-   - Example: `rg-participant-john`
+   - Example: `ODL-azure-Contoso-2157974`
 2. Click on your **Resource Group name** to open it
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Resource Groups list with the participant's resource group highlighted]**
+<img src="./images/Screenshot 2026-03-30 214913.png">
 
 ---
 
@@ -117,7 +114,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Access Control (IAM) page showing the top buttons/tabs: Add, Check access, Role assignments, Roles]**
+<img src="./images/Screenshot 2026-03-30 215048.png">
 
 ---
 
@@ -132,7 +129,7 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the "View my access" or "Check access" panel showing the user's current role assignment at the Resource Group scope]**
+<img src="./images/Screenshot 2026-03-30 215140.png">
 
 ---
 
@@ -143,27 +140,11 @@ https://portal.azure.com
 
 ---
 
->  **[IMAGE PLACEHOLDER — Screenshot of the IAM page with the "Role assignments" tab highlighted and the side panel closed]**
+<img src="./images/Screenshot 2026-03-30 215309.png">
 
 ---
 
-### Step 8: Read the Role Assignments List
-
-1. The **Role assignments** tab will show a table listing everyone who has access to this Resource Group
-2. The table has the following columns:
-   - **Name** — the user, group, or application that has the role
-   - **Type** — whether it is a User, Group, or Service Principal
-   - **Role** — which role they have (Owner, Contributor, Reader, etc.)
-   - **Scope** — where the role was assigned (this RG, subscription, etc.)
-3. Read through the entire list carefully
-
----
-
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Role Assignments table showing Name, Type, Role, and Scope columns with multiple entries visible]**
-
----
-
-### Step 9: Identify Your Own User in the List
+### Step 8: Identify Your Own User in the List
 
 1. In the Role assignments list, look for your own **username**
 2. Check what **Role** is assigned to your account
@@ -173,26 +154,11 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot with the participant's username highlighted in the Role Assignments list with their role and scope labeled]**
+<img src="./images/Screenshot 2026-03-30 215620.png">
 
 ---
 
-### Step 10: Identify the Service Principal in the List
-
-1. In the same Role assignments list, look for an entry where the **Type** column says **Service Principal**
-2. The **Name** will be your Service Principal name (visible on your Lab Details Page) or a long Application ID
-3. Note the **Role** assigned to it — it should be **Contributor**
-4. Note the **Scope** — it should also be scoped to **"This resource"** (your Resource Group)
-
-> 💡 **What this means:** The Service Principal is a non-human identity used by your Azure DevOps pipelines to connect to Azure. It has been given Contributor access to your Resource Group so that pipelines can deploy resources here. It cannot access anything outside this Resource Group.
-
----
-
-> 📸 **[IMAGE PLACEHOLDER — Screenshot with the Service Principal entry highlighted in the Role Assignments list showing Type = "Service Principal" and Role = "Contributor"]**
-
----
-
-### Step 11: Understand the Difference Between Your User and the Service Principal
+### Step 9: Understand the Difference Between Your User and the Service Principal
 
 After looking at both entries, understand these key differences:
 
@@ -206,11 +172,9 @@ After looking at both entries, understand these key differences:
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot showing both the user entry and service principal entry in the Role Assignments list side by side for comparison]**
-
 ---
 
-### Step 12: Explore the Available Roles (No Assignment)
+### Step 10: Explore the Available Roles (No Assignment)
 
 1. Click on the **Roles** tab on the IAM page
 2. A list of all built-in Azure roles will appear — scroll through the list
@@ -226,8 +190,7 @@ After looking at both entries, understand these key differences:
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Roles tab list showing various built-in roles, with Contributor highlighted and its detail panel visible on the right]**
-
+<img src="./images/Screenshot 2026-03-30 220056.png">
 ---
 
 ### Step 13: Return to the Overview Page
@@ -235,10 +198,6 @@ After looking at both entries, understand these key differences:
 1. In the left menu, click **Overview** to return to the main Resource Group page
 2. Confirm that everything looks exactly the same as when you started
 3. No changes have been made
-
----
-
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Resource Group Overview tab confirming the view is back to normal]**
 
 ---
 

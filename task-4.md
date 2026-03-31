@@ -18,15 +18,15 @@ Before starting, make sure you have the following ready from your **Lab Details 
 
 | Item | Where to Find It |
 |---|---|
-| Azure Portal Login URL | Lab Details Page |
-| Username | Lab Details Page |
-| Password | Lab Details Page |
-| **Tenant ID** | Lab Details Page |
-| **Client ID (Application ID)** | Lab Details Page |
-| **Client Secret Value** | Lab Details Page |
-| **Subscription ID** | Lab Details Page |
+| Azure Portal Login URL | Lab Environment Page |
+| Username | Lab Environment Page |
+| Password | Lab Environment Page |
+| **Tenant ID** | Lab Environment Page |
+| **Client ID (Application ID)** | Lab Environment Page |
+| **Client Secret Value** | Lab Environment Page |
+| **Subscription ID** | Lab Environment Page |
 
->  Keep your Lab Details Page open in a separate browser tab — you will need to refer back to it multiple times during this task.
+>  Keep your Lab Environment Page open in a separate browser tab — you will need to refer back to it multiple times during this task.
 
 ---
 
@@ -69,13 +69,13 @@ https://portal.azure.com
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Azure Portal home page after a successful login]**
+<img src="./images/Screenshot 2026-03-30 212318.png">
 
 ---
 
-### Step 2: Note Down Your SP Details from the Lab Details Page
+### Step 2: Note Down Your Service principal Details from the Lab Details Page
 
-Before doing anything in the portal, open your **Lab Details Page** and note down the following four values:
+Before doing anything in the portal, open your **Lab Environment Page** and note down the following four values:
 
 | Field | Your Value (Fill This In) |
 |---|---|
@@ -88,8 +88,7 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of a sample Lab Details Page showing where Tenant ID, Subscription ID, Client ID, and Client Secret are located (values blurred for security)]**
-
+<img src="./images/Screenshot 2026-03-30 224344.png">
 ---
 
 ### Step 3: Navigate to Microsoft Entra ID
@@ -102,7 +101,7 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the search bar with "Microsoft Entra ID" typed and the result highlighted in the dropdown]**
+<img src="./images/Screenshot 2026-03-30 224440.png">
 
 ---
 
@@ -117,7 +116,7 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Microsoft Entra ID Overview page with the Tenant ID field highlighted and labeled]**
+<img src="./images/Screenshot 2026-03-30 224633.png">
 
 ---
 
@@ -129,7 +128,7 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Entra ID left menu with the "Manage" section visible and "App registrations" highlighted]**
+<img src="./images/Screenshot 2026-03-30 224746.png">
 
 ---
 
@@ -147,7 +146,7 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the App Registrations page with the "All applications" tab selected and a list of applications visible]**
+<img src="./images/Screenshot 2026-03-30 225146.png">
 
 ---
 
@@ -162,7 +161,7 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the All Applications search box with the Client ID pasted in and one matching result visible in the list]**
+<img src="./images/Screenshot 2026-03-30 225046.png">
 
 ---
 
@@ -182,13 +181,13 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
->  **[IMAGE PLACEHOLDER — Screenshot of the App Registration Overview page with Application (client) ID and Directory (tenant) ID fields highlighted and labeled]**
+<img src="./images/Screenshot 2026-03-30 225046.png">
 
 ---
 
 ### Step 9: Explore the Certificates & Secrets Section
 
-1. In the **left menu** of the App Registration page, look under **Manage**
+1. In the **left menu** of the App Registration page, look under **Manage** inside your App registration.
 2. Click on **Certificates & secrets**
 3. The **Certificates & secrets** page will open
 4. You will see two tabs:
@@ -198,7 +197,7 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
->  **[IMAGE PLACEHOLDER — Screenshot of the Certificates & secrets page with the "Client secrets" tab selected]**
+<img src="./images/Screenshot 2026-03-30 225527.png">
 
 ---
 
@@ -218,7 +217,7 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Client secrets list showing a secret with "Hidden value" in the Value column, with that column highlighted and labeled]**
+<img src="./images/Screenshot 2026-03-30 225615.png">
 
 ---
 
@@ -232,42 +231,12 @@ Before doing anything in the portal, open your **Lab Details Page** and note dow
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Client secrets list with the Expires column highlighted showing the expiry date]**
+<img src="./images/Screenshot 2026-03-30 225655.png">
+
 
 ---
 
-### Step 12: Navigate to API Permissions (Explore Only)
-
-1. In the left menu, click on **API permissions**
-2. This page shows what Microsoft APIs this Service Principal has been granted access to
-3. You may see **Microsoft Graph** or **Azure Service Management** listed
-4. Do not add or remove any permissions — just read and observe
-
----
-
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the API permissions page showing the list of permissions granted to the Service Principal]**
-
----
-
-### Step 13: Answer These Reflection Questions
-
-Before completing this task, answer the following questions in your own words:
-
-1. **Why can't you see the Client Secret value in the Certificates & Secrets page?**
-   
-   *Your Answer:*
-
-2. **What is the difference between the Client ID and the Client Secret?**
-   
-   *Your Answer:*
-
-3. **What would happen if the Client Secret expires and you don't rotate it?**
-   
-   *Your Answer:*
-
----
-
-### Step 14: Return to the Azure Home Page
+### Step 12: Return to the Azure Home Page
 
 1. In the top-left area, click the **Microsoft Azure** logo or the hamburger menu (≡)
 2. This will take you back to the Azure Portal home page
@@ -275,7 +244,7 @@ Before completing this task, answer the following questions in your own words:
 
 ---
 
-> 📸 **[IMAGE PLACEHOLDER — Screenshot of the Azure home page after navigating back, confirming no changes were made]**
+<img src="./images/Screenshot 2026-03-30 212318.png">
 
 ---
 
